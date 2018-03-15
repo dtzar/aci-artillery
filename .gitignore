@@ -57,3 +57,8 @@ typings/
 # dotenv environment variables file
 .env
 
+# load.yml
+load.yml
+
+# data-generator.js
+data-generator.js

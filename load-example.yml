@@ -1,0 +1,25 @@
+config:
+
+  target: "YOUR_HOST_NAME_HERE"
+  processor: "./data-generator.js"
+  phases:
+    - duration: 60
+      arrivalRate: 300
+  defaults:
+    headers:
+      Authorization : "YOUR_SAS_KEY_HERE"
+      Content-Type : "application/json"
+scenarios:
+  - flow:
+    - function: "generateRandomData"
+    - post:
+        url: "/YOUR_ENDPOINT_URI"
+        headers:
+          BrokerProperties: '{"YOUR_HEADER_TAG": "YOUR_HEADER_VALUE"}'
+        json:
+          parameter01 : "{{parameter01}}"
+          parameter02 : "{{parameter02}}"
+          parameter03 : 
+            - parameter03_subparam01: "static_parameter03_subparam01"
+              paramter03_subparam02: "{{parameter03_subparam02}}"  
+    - log: "parameter01: {{parameter01}} | parameter02: {{parameter02}} | parameter03_subparam02: {{parameter03_subparam02}}"

@@ -1,0 +1,15 @@
+{
+  "name": "load-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "random.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Manvi Kapoor",
+  "license": "ISC",
+  "dependencies": {
+    "random-seed": "^0.3.0",
+    "artillery": "^1.6.0"
+  }
+}
