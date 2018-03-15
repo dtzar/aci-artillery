@@ -1,0 +1,26 @@
+# Service Principle
+subscription_id     = "YOUR_SUBSCRIPTION_ID"
+client_id           = "YOUR_CLIENT_ID"
+client_secret       = "YOUR_CLIENT_SECRET"
+tenant_id           = "YOUR_TENANT_ID"
+
+# Resource Group
+resource_group      = "RemoveThisEH"
+location            = "JapanEast"
+environment         = "test"
+
+
+# Event Hub
+event_hub_namespace = "ArtHub"
+event_hub_name      = "target"
+
+# Stream Analytics
+
+stream_analytics_name = "SomeJob"
+stream_analytics_sku = "standard"
+
+# CosmosDB
+
+cosmosdb_account_name = "sacosmos"
+cosmosdb_consistency_level = "BoundedStaleness"
+cosmosdb_offer_type = "Standard"
