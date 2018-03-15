@@ -1,5 +1,4 @@
 config:
-
   target: "YOUR_HOST_NAME_HERE"
   processor: "./data-generator.js"
   phases:

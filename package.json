@@ -4,12 +4,13 @@
   "description": "",
   "main": "random.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "artillery run load-example.yml"
   },
   "author": "Manvi Kapoor",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "random-seed": "^0.3.0",
-    "artillery": "^1.6.0"
+    "artillery": "^1.6.0-14"
   }
 }
