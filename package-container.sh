@@ -3,5 +3,4 @@
 set -e
 set -o pipefail
 
-#artillery run -o $CONTAINER_NAME-report.json load.yml
-echo $CONTAINER_NAME
+./node_modules/artillery/bin/artillery run -o /aci/reports/$CONTAINER_NAME-report.json /aci/artillery-config/load.yml

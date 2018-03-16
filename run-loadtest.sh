@@ -8,17 +8,21 @@ PRINT_METRICS=${PRINT_METRICS:=false}
 EVENT_HUB_ON=${EVENT_HUB_ON:=false}
 IMAGE="dtzar/aci-artillery"
 CONTAINER_PREFIX=$(date +"%Y%m%d-%H%M")
-CONTAINER_COUNT=${CONTAINER_COUNT:=4}
+CONTAINER_COUNT=${CONTAINER_COUNT:=1}
 CONTAINER_NAME=$CONTAINER_PREFIX-count$CONTAINER_COUNT
 RESOURCE_GROUP=${RESOURCE_GROUP:=$CONTAINER_NAME}
 SLEEP_IN_SECONDS=${SLEEP_IN_SECONDS:=300}
+
+ACI_PERS_STORAGE_ACCOUNT_NAME=''
+STORAGE_KEY=''
+ACI_PERS_SHARE_NAME=''
 
 # Default options is duration twice the amount of sleep
 # so that the test takes at least as long as the time we
 # keep the container alive
 WRK_OPTIONS=${WRK_OPTIONS:="-d $((SLEEP_IN_SECONDS*2))"}
 
-if [ $EVENT_HUB_ON ]; then
+if [ $EVENT_HUB_ON == true ]; then
 
     if [ $EXISTING_EVENT_HUB ]; then
     KEEP_EVENT_HUB=true
@@ -86,10 +90,18 @@ if [ $EVENT_HUB_ON ]; then
     az resource delete --id $EVENT_HUB_ID || true
     fi
 else
+    #az group create -n $RESOURCE_GROUP -l southeastasia
     COUNTER=1
     while [ $COUNTER -le $CONTAINER_COUNT ]; do
-    az container create --output json -g $RESOURCE_GROUP --name $CONTAINER_NAME --image "$IMAGE" --restart-policy Never -e CONTAINER_NAME="$CONTAINER_NAME" > /dev/null
-    let COUNTER=COUNTER+1
+        az container create --output json -g $RESOURCE_GROUP --name $CONTAINER_NAME$COUNTER --image "$IMAGE" \
+        --restart-policy Never \
+        --azure-file-volume-account-name $ACI_PERS_STORAGE_ACCOUNT_NAME \
+        --azure-file-volume-account-key $STORAGE_KEY \
+        --azure-file-volume-share-name $ACI_PERS_SHARE_NAME \
+        --azure-file-volume-mount-path /aci/ \
+        -e CONTAINER_NAME="$CONTAINER_NAME$COUNTER" > /dev/null
+        echo "Executing container " $CONTAINER_NAME$COUNTER
+        let COUNTER=COUNTER+1
     done
 fi
 
