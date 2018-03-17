@@ -73,13 +73,13 @@ if [ $EVENT_HUB_ON == true ]; then
     echo "The Event Hub currently has $TOTAL_MESSAGES incoming messages"
     fi
 
-    # echo "Removing the Container Instances..."
+    echo "Removing the Container Instances..."
 
-    # COUNTER=1
-    # while [ $COUNTER -le $CONTAINER_COUNT ]; do
-    #   az container delete -g $RESOURCE_GROUP --name $CONTAINER_PREFIX$COUNTER --yes > /dev/null
-    #   let COUNTER=COUNTER+1
-    # done
+    COUNTER=1
+    while [ $COUNTER -le $CONTAINER_COUNT ]; do
+      az container delete -g $RESOURCE_GROUP --name $CONTAINER_PREFIX$COUNTER --yes > /dev/null
+      let COUNTER=COUNTER+1
+    done
 
     if [ "$KEEP_EVENT_HUB" = true ]; then
     echo "The Event Hub was not removed..."
@@ -102,6 +102,11 @@ else
         -e CONTAINER_NAME="$CONTAINER_NAME$COUNTER" > /dev/null
         echo "Executing container " $CONTAINER_NAME$COUNTER
         let COUNTER=COUNTER+1
+    done
+    COUNTER=1
+    while [ $COUNTER -le $CONTAINER_COUNT ]; do
+       az container delete -g $RESOURCE_GROUP --name $CONTAINER_NAME$COUNTER --yes > /dev/null
+       let COUNTER=COUNTER+1
     done
 fi
 
