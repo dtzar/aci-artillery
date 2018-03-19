@@ -21,7 +21,7 @@ stream_analytics_sku = "standard"
 
 stream_analytics_cosmosdb_name = "somedb"
 stream_analytics_cosmosdb_collection_name_pattern = "collection"
-stream_analytics_cosmosdb_partition_key = "code"
+stream_analytics_cosmosdb_partition_key = "/code"
 
 # CosmosDB
 

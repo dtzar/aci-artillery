@@ -102,10 +102,18 @@ resource "azurerm_cosmosdb_account" "test" {
     priority = 0
   }
 
+  # Create Cosmos DB and Collection. It requires az command
+  # https://docs.microsoft.com/ja-jp/azure/cosmos-db/scripts/create-database-account-collections-cli?toc=%2fcli%2fazure%2ftoc.json
+
+  provisioner "local-exec" {
+    command = "az cosmosdb database create --name ${var.cosmosdb_account_name} --db-name ${var.stream_analytics_cosmosdb_name} --resource-group ${azurerm_resource_group.test.name}"
+  }
+  provisioner "local-exec" {
+    command = "az cosmosdb collection create --collection-name ${var.stream_analytics_cosmosdb_collection_name_pattern} --name ${var.cosmosdb_account_name} --db-name ${var.stream_analytics_cosmosdb_name} --resource-group ${azurerm_resource_group.test.name} --partition-key-path ${var.stream_analytics_cosmosdb_partition_key}"
+  }
   tags {
     environment = "${var.environment}"
   }
-
   depends_on = ["azurerm_resource_group.test"]
 }
 
