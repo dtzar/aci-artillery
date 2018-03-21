@@ -1,6 +1,8 @@
 # Infrastructure deployment 
 
-This directory files enable us to deploy EventHubs, Stream Analytics, and CosmosDB with configuration. We use Terraform this pupose.
+The files in this directory deploy EventHubs, Stream Analytics, and CosmosDB with configuration using Terraform.
+
+> Note: This infrastructure deployment is optional to use with aci-artillery.  It only provides an example of a base infrastructure where load could be pushed against using aci-artillery.
 
 # Pre-requisite 
 
