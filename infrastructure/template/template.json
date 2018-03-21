@@ -1,0 +1,120 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+    "contentVersion": "1.2.2.0",
+    "parameters": {
+        "name": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string"
+        },
+        "apiVersion": {
+            "defaultValue": "2016-03-01",
+            "type": "string"
+        },
+        "sku": {
+            "type": "string"
+        },
+        "jobType": {
+            "defaultValue": "Cloud",
+            "type": "string"
+        },
+        "streamingUnits": {
+            "defaultValue": 1,
+            "type": "int"
+        },
+        "eventHubNameSpace": {
+            "type": "string"
+        },
+        "eventHubSharedAccessPolicyName": {
+            "type": "string"
+        },
+        "eventHubSharedAccessKey": {
+            "type": "string"
+        },
+        "eventHubName": {
+            "type": "string"
+        },
+        "cosmosDBAccountName": {
+            "type": "string"
+        },
+        "cosmosDBAccountKey": {
+            "type": "string"
+        },
+        "cosmosDBDatabaseName": {
+            "type": "string"
+        },
+        "cosmosDBCollectionNamePattern": {
+            "type": "string"
+        },
+        "cosmosDBPartitionKey": {
+            "type": "string"
+        }
+    },
+    "resources": [
+        {
+            "apiVersion": "[parameters('apiVersion')]",
+            "name": "[parameters('name')]",
+            "location": "[parameters('location')]",
+            "type": "Microsoft.StreamAnalytics/StreamingJobs",
+            "properties": {
+                "sku": {
+                    "name": "[parameters('sku')]"
+                },
+                "outputErrorPolicy": "stop",
+                "eventsOutOfOrderPolicy": "adjust",
+                "eventsOutOfOrderMaxDelayInSeconds": 0,
+                "eventsLateArrivalMaxDelayInSeconds": 5,
+                "dataLocale": "en-US",
+                "jobType": "[parameters('jobType')]",
+                "inputs": [
+                   {
+                       "name": "YourInputAlias",
+                       "properties": {
+                           "datasource": {  
+                            "type":"Microsoft.ServiceBus/EventHub",
+                            "properties":{    
+                               "serviceBusNamespace":"[parameters('eventHubNameSpace')]",  
+                               "sharedAccessPolicyName":"[parameters('eventHubSharedAccessPolicyName')]",  
+                               "sharedAccessPolicyKey":"[parameters('eventHubSharedAccessKey')]",  
+                               "eventHubName":"[parameters('eventHubName')]"  
+                            }  
+                           },
+                            "type":"Stream",
+                            "Serialization": {
+                                "type": "Json",
+                                "Properties": {
+                                    "Encoding": "UTF8"
+                                }
+                            }
+                        }
+                   } 
+                ],
+                "transformation": {
+                    "name": "Transformation",
+                    "properties": {
+                        "query": "SELECT\r\n    *\r\nINTO\r\n    [YourOutputAlias]\r\nFROM\r\n    [YourInputAlias]",
+                        "streamingUnits": "[parameters('streamingUnits')]"
+                    }
+                },
+                "outputs": [
+                    {
+                    "name": "YourOutputAlias",
+                    "properties":{    
+                        "datasource":{    
+                           "type":"Microsoft.Storage/DocumentDB",  
+                           "properties":{  
+                                "accountId": "[parameters('cosmosDBAccountName')]",
+                                "accountKey": "[parameters('cosmosDBAccountKey')]",
+                                "database": "[parameters('cosmosDBDatabaseName')]",
+                                "collectionNamePattern": "[parameters('cosmosDBCollectionNamePattern')]",
+                                "partitionKey": "[parameters('cosmosDBPartitionKey')]" 
+                           }  
+                        }  
+                     } 
+                    }
+                ]
+            }
+        }
+    ]
+}

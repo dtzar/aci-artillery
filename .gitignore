@@ -62,3 +62,6 @@ load.yml
 
 # data-generator.js
 data-generator.js
+
+# Mac
+.DS_Store
